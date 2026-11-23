@@ -1,0 +1,60 @@
+# ==============================================================================
+# sbom-query Sample Target List
+# ==============================================================================
+# Syntax Reference:
+#   - Blank lines and lines starting with '#' are ignored.
+#   - Package matching is case-insensitive (e.g., 'PyYAML' matches 'pyyaml').
+#   - Omit '@' to match ANY installed version of a package or binary.
+#   - Use '@<constraint>' to filter by exact version, list, or range.
+#
+# Usage:
+#   python3 sbom_query.py -d ./sbom_exports -l packages.example.txt
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Catch-All Rules (Match Any Version)
+# ------------------------------------------------------------------------------
+# Useful for flagging EOL runtimes, legacy utilities, or banned packages.
+# Note: Include distro-specific package names alongside base binary names.
+php7.4
+php7.4-fpm
+php8.1
+php8.1-fpm
+telnet
+
+# ------------------------------------------------------------------------------
+# 2. Exact Version & Discrete Version Lists (Comma = OR)
+# ------------------------------------------------------------------------------
+# Match a single exact version
+angulartics2@14.1.2
+
+# Match any of the listed versions (comma-separated values without operators)
+xz-utils@5.6.0, 5.6.1
+json-rules-engine-simplified@0.2.4, 0.2.1
+
+# ------------------------------------------------------------------------------
+# 3. Comparison Operators & Compound Ranges (Comma = AND)
+# ------------------------------------------------------------------------------
+# Supported operators: <, <=, >, >=, ==, !=
+# Distro epochs (e.g., '2:8.2.7') and suffixes (e.g., '-0ubuntu0.24.04.1')
+# are stripped automatically before evaluating version rules.
+openssl@<3.0.13
+curl@<=8.5.0
+
+# Compound range: matches versions >= 8.3.0 AND < 8.3.36
+php@>=8.3.0,<8.3.36
+php8.3@>=8.3.0,<8.3.36
+php8.3-fpm@>=8.3.0,<8.3.36
+
+# ------------------------------------------------------------------------------
+# 4. Hyphen Range Shorthand (Inclusive)
+# ------------------------------------------------------------------------------
+# Automatically translates 'MIN - MAX' into '>=MIN,<=MAX'
+log4j-core@2.0.0 - 2.14.1
+
+# ------------------------------------------------------------------------------
+# 5. Scoped Packages (npm, Maven, etc.)
+# ------------------------------------------------------------------------------
+# Scoped names containing '@' split on the final '@' delimiter
+@ctrl/deluge@7.2.2
+@nestjs/core@<10.0.0
